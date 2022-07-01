@@ -1,0 +1,38 @@
+[
+    {
+        "nombre": "Buzo",
+        "id":1,
+        "precio": 5300,
+        "imagen": "fotosProductos/buzo.jpg"
+    },
+    {
+        "nombre": "Campera",
+        "id":2,
+        "precio": 6000,
+        "imagen": "fotosproductos/campera.jpg"
+    },
+    {
+        "nombre": "Joggins",
+        "id":3,
+        "precio": 4500,
+        "imagen": "fotosproductos/pantalon.jpg"
+    },
+    {
+        "nombre": "Pantalon Vaquero",
+        "id":4,
+        "precio":  4800,
+        "imagen": "fotosproductos/vaquero-bandana.jpg"
+    },
+    {
+        "nombre": "Campera Hombre",
+        "id":5,
+        "precio": 5600,
+        "imagen": "fotosproductos/campera.jpg"
+    },
+    {
+        "nombre": "Campera Cuero",
+        "id":6,
+        "precio": 8000,
+        "imagen": "fotosproductos/pantalon.jpg"
+    }
+]
