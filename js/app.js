@@ -1,12 +1,17 @@
+const cards = document.getElementById('cards')
 const items = document.getElementById('items')
+const total = document.getElementById('total')
 const templateCard = document.getElementById('template-card').content
+const templateTotal = document.getElementById('template-total').content
+const templateCarrito = document.getElementById('template-carrito').content
+
 const fragment = document.createDocumentFragment()
 let carrito = {}
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchData()
 })
-items.addEventListener('click', e => {
+cards.addEventListener('click', e => {
     addCarrito(e)
 })
 
@@ -24,7 +29,7 @@ const fetchData = async () => {
 
 // recorrer array
 const pintarCards = data => {
-    console.log(data)
+    // console.log(data)
     data.forEach(producto => {
         templateCard.querySelector('h5').textContent = producto.nombre
         templateCard.querySelector('p').textContent = producto.precio
@@ -34,7 +39,7 @@ const pintarCards = data => {
         const clone = templateCard.cloneNode(true)
         fragment.appendChild(clone)
     })
-    items.appendChild(fragment)
+    cards.appendChild(fragment)
 }
 
 const addCarrito = e => {
@@ -51,7 +56,7 @@ const setCarrito = objeto => {
         nombre: objeto.querySelector('h5').textContent,
         precio: objeto.querySelector('p').textContent,
         cantidad: 1
-
+    
     }
 
     if (carrito.hasOwnProperty(producto.id)) {
@@ -59,6 +64,6 @@ const setCarrito = objeto => {
     }
 
     carrito[producto.id] = {...producto}
-
-    console.log(producto);
+    console.log(producto)
 }
+
