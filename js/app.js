@@ -1,18 +1,26 @@
-const cards = document.getElementById('cards')
 const items = document.getElementById('items')
+const cards = document.getElementById('cards')
 const total = document.getElementById('total')
 const templateCard = document.getElementById('template-card').content
 const templateTotal = document.getElementById('template-total').content
 const templateCarrito = document.getElementById('template-carrito').content
-
 const fragment = document.createDocumentFragment()
 let carrito = {}
 
+// EVENTOS
 document.addEventListener('DOMContentLoaded', () => {
     fetchData()
+    if (localStorage.getItem('carrito')) {
+        carrito = JSON.parse(localStorage.getItem('carrito'))
+        pintarCarrito()
+    }
 })
 cards.addEventListener('click', e => {
     addCarrito(e)
+})
+// EVENTO CLICK
+items.addEventListener('click', e => {
+    btnAccion(e)
 })
 
 // json
@@ -21,14 +29,14 @@ const fetchData = async () => {
         const res = await fetch('js/api.json')
         const data = await res.json()
         // console.log(data)
-        pintarCards(data)
+        pintarcards(data)
     } catch (error) {
         console.log(error)
     }
 }
 
 // recorrer array
-const pintarCards = data => {
+const pintarcards = data => {
     // console.log(data)
     data.forEach(producto => {
         templateCard.querySelector('h5').textContent = producto.nombre
@@ -40,6 +48,9 @@ const pintarCards = data => {
         fragment.appendChild(clone)
     })
     cards.appendChild(fragment)
+
+    pintarCarrito()
+
 }
 
 const addCarrito = e => {
@@ -64,6 +75,82 @@ const setCarrito = objeto => {
     }
 
     carrito[producto.id] = {...producto}
-    console.log(producto)
+    // console.log(producto)
+    pintarCarrito()
 }
 
+// PINTAR CARRITO
+
+const pintarCarrito = () => {
+    // console.log(carrito)
+    items.innerHTML = ""
+    Object.values(carrito).forEach(producto => {
+        templateCarrito.querySelector('th').textContent = producto.id
+        templateCarrito.querySelectorAll('td')[0].textContent = producto.nombre
+        templateCarrito.querySelectorAll('td')[1].textContent = producto.cantidad
+        templateCarrito.querySelector('.btn-info').dataset.id = producto.id
+        templateCarrito.querySelector('.btn-danger').dataset.id = producto.id
+        templateCarrito.querySelector('span').textContent = producto.cantidad * producto.precio
+
+        const clone = templateCarrito.cloneNode(true)
+        fragment.appendChild(clone)
+    
+    })
+    items.appendChild(fragment)
+
+    pintarTotal()
+
+    localStorage.setItem('carrito', JSON.stringify(carrito))
+}
+
+const pintarTotal = () => {
+    total.innerHTML = ''
+    if (Object.keys(carrito).length === 0) {
+        total.innerHTML = `
+        <th scope="row" colspan="5">Carrito vacío - comience a comprar!</th>
+        `
+        return
+    }
+
+    const nCantidad = Object.values(carrito).reduce((acc, {cantidad}) => acc + cantidad, 0)
+    const nPrecio = Object.values(carrito).reduce((acc, {cantidad, precio}) => acc + cantidad * precio,0)
+    // console.log(nPrecio)
+
+    templateTotal.querySelectorAll('td')[0].textContent = nCantidad
+    templateTotal.querySelector('span').textContent = nPrecio
+
+    const clone = templateTotal.cloneNode(true)
+    fragment.appendChild(clone)
+    total.appendChild(fragment)
+
+    // VACIAR CARRITO
+    const btnVaciar = document.getElementById('vaciar-carrito')
+    btnVaciar.addEventListener('click', () => {
+        carrito = {}
+        pintarCarrito()
+    })
+
+}
+
+// BOTON AUMENTAR Y DISMINUIR
+const btnAccion = e => {
+    if (e.target.classList.contains('btn-info')) {
+        console.log(carrito[e.target.dataset.id])
+        // carrito[e.target.dataset.id]
+        const producto = carrito[e.target.dataset.id]
+        producto.cantidad++
+        carrito[e.target.dataset.id] = {...producto}
+        pintarCarrito()
+    }
+
+    if (e.target.classList.contains('btn-danger')) {
+        const producto = carrito[e.target.dataset.id]
+        producto.cantidad--
+        if (producto.cantidad === 0) {
+            delete carrito[e.target.dataset.id]
+        }
+        pintarCarrito()
+    }
+
+    e.stopPropagation()
+}
