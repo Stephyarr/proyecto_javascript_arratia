@@ -64,6 +64,27 @@ const setCarrito = objeto => {
     }
 
     carrito[producto.id] = {...producto}
-    console.log(producto)
+    // console.log(producto)
+    pintarCarrito()
 }
+
+const pintarCarrito = () => {
+    console.log(carrito)
+    Object.values(carrito).forEach(producto => {
+        templateCarrito.querySelector('th').textContent = producto.id
+        templateCarrito.querySelectorAll('td')[0].textContent = producto.titulo
+        templateCarrito.querySelectorAll('td')[1].textContent = producto.cantidad
+        templateCarrito.querySelector('.btn-info').dataset.id = producto.id
+        templateCarrito.querySelector('.btn-danger').dataset.id = producto.id
+        templateCarrito.querySelector('span').textContent = producto.cantidad * producto.precio
+        
+        const clone = templateCarrito.cloneNode(true)
+        fragment.appendChild(clone)
+
+    
+    })
+    items.appendChild(fragment)
+}
+
+
 
