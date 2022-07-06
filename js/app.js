@@ -19,7 +19,7 @@ const fetchData = async () => {
 
 const pintarCards = data => {
     data.forEach(producto => {
-        templadeCard.querySelector('h5').texContent = producto.titulo
+        templadeCard.querySelector('h5').textContent = producto.titulo
 
         const clone = templadeCard.cloneNode(true)
         fragment.appendChild(clone)
