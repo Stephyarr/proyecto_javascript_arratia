@@ -14,6 +14,10 @@ cards.addEventListener('click', e => {
     addCarrito(e)
 })
 
+items.addEventListener('click', e => {
+    btnAccion(e)
+})
+
 const fetchData = async () => {
     try {
         const res = await fetch('js/api.json')
@@ -90,6 +94,7 @@ const pintarTotal = () => {
         total.innerHTML = `
         <th scope="row" colspan="5">Carrito vacío - comience a comprar!</th>
         `
+        return
     }
 
     const nCantidad = Object.values(carrito).reduce((acc, {cantidad}) => acc + cantidad, 0)
@@ -101,4 +106,34 @@ const pintarTotal = () => {
     const clone = templateTotal.cloneNode(true)
     fragment.appendChild(clone)
     total.appendChild(fragment)
+
+    const btnVaciar = document.getElementById('vaciar-carrito')
+    btnVaciar.addEventListener('click', () => {
+        carrito = {}
+        pintarCarrito()
+    })
+}
+
+// Boton aumentar y disminuir
+const btnAccion = e => {
+    // console.log(e.target)
+    if(e.target.classList.contains('btn-info')) {
+        console.log(carrito[e.target.dataset.id])
+        
+        const producto = carrito[e.target.dataset.id]
+        producto.cantidad++
+        carrito[e.target.dataset.id] = {...producto}
+        pintarCarrito()
+    }
+
+    if(e.target.classList.contains('btn-danger')) {
+        const producto = carrito[e.target.dataset.id]
+        producto.cantidad--
+        if(producto.cantidad === 0) {
+            delete carrito[e.target.dataset.id]
+        }
+        pintarCarrito()
+    }
+
+    e.stopPropagation()
 }
