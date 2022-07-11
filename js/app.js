@@ -9,6 +9,10 @@ let carrito = {}
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchData()
+    if (localStorage.getItem('carrito')) {
+        carrito = JSON.parse(localStorage.getItem('carrito'))
+        pintarCarrito()
+    }
 })
 cards.addEventListener('click', e => {
     addCarrito(e)
@@ -32,7 +36,7 @@ const fetchData = async () => {
 const pintarCards = data => {
     console.log(data)
     data.forEach(producto => {
-        templateCard.querySelector('h5').textContent = producto.titulo
+        templateCard.querySelector('h5').textContent = producto.nombre
         templateCard.querySelector('p').textContent = producto.precio
         templateCard.querySelector('img').setAttribute("src", producto.imagen)
         templateCard.querySelector('.btn-dark').dataset.id = producto.id
@@ -41,6 +45,8 @@ const pintarCards = data => {
         fragment.appendChild(clone)
     })
     cards.appendChild(fragment)
+
+    pintarCarrito()
 }
 
 // Boton
@@ -57,7 +63,7 @@ const setCarrito = objecto => {
     // console.log(objecto)
     const producto = {
         id: objecto.querySelector('.btn-dark').dataset.id,
-        titulo: objecto.querySelector('h5').textContent,
+        nombre: objecto.querySelector('h5').textContent,
         precio: objecto.querySelector('p').textContent,
         cantidad: 1
     }
@@ -66,6 +72,7 @@ const setCarrito = objecto => {
     }
 
     carrito[producto.id] = {...producto}
+    // console.log(producto)
     pintarCarrito()
 }
 
@@ -74,7 +81,7 @@ const pintarCarrito = () => {
     items.innerHTML = ""
     Object.values(carrito).forEach(producto => {
         templateCarrito.querySelector('th').textContent = producto.id
-        templateCarrito.querySelectorAll('td')[0].textContent = producto.titulo
+        templateCarrito.querySelectorAll('td')[0].textContent = producto.nombre
         templateCarrito.querySelectorAll('td')[1].textContent = producto.cantidad
         templateCarrito.querySelector('.btn-info').dataset.id = producto.id
         templateCarrito.querySelector('.btn-danger').dataset.id = producto.id
@@ -86,6 +93,8 @@ const pintarCarrito = () => {
     items.appendChild(fragment)
 
     pintarTotal()
+
+    localStorage.setItem('carrito', JSON.stringify(carrito))
 }
 
 const pintarTotal = () => {

@@ -40,24 +40,11 @@
     <!-- cards -->
     <div class="row" id="cards"></div> 
     <!-- PRODUCTOS -->
-    <template id="template-card">
-      <div class="col-12 mb-2 col-md-4">
-        <div class="card">
-          <img src="" alt="" class="card-img-top">
-          <div class="card-body">
-            <h5>titulo</h5>
-            <p>precio</p>
-            <button class="btn btn-dark">Comprar</button>
-          </div>
-        </div>
-      </div>
-    </template>
-
     <table class="table">
       <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Item</th>
+          <th scope="col">Producto</th>
           <th scope="col">Cantidad</th>
           <th scope="col">Acción</th>
           <th scope="col">Total</th>
@@ -69,7 +56,20 @@
           <th scope="row" colspan="5">Carrito vacío - comience a comprar!</th>
         </tr>
       </tfoot>
-    </table>
+  </table>
+
+  <template id="template-card">
+    <div class="col-12 mb-2 col-md-4">
+      <div class="card">
+        <img src="" alt="" class="card-img-top">
+        <div class="card-body">
+          <h5>Titulo</h5>
+          <p>precio</p>
+          <button class="btn btn-dark">Comprar</button>
+        </div>
+      </div>
+    </div>
+  </template>
 
     <template id="template-total">
       <th scope="row" colspan="2">Total productos</th>
